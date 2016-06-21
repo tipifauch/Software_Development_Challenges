@@ -1,0 +1,1 @@
+awk '{FS=":|,"}{for (i=4; i<=NF; i++) print $i}' group | sed '/^$/d' |sort | uniq -c | sort -nr

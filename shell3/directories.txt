@@ -1,0 +1,20 @@
+./file1
+./dirA
+ ./dirA/dirC
+  ./dirA/dirC/file4
+  ./dirA/dirC/file5
+  ./dirA/dirC/dirD
+   ./dirA/dirC/dirD/file8
+   ./dirA/dirC/dirD/file6
+   ./dirA/dirC/dirD/file7
+ ./dirA/dirE
+  ./dirA/dirE/file9
+ ./dirA/file2
+ ./dirA/file3
+./dirB
+ ./dirB/file10
+  ./dirB/dirF
+   ./dirB/dirF/file11
+   ./dirB/dirF/file12
+   ./dirB/dirF/dirG
+    ./dirB/dirF/dirG/file13

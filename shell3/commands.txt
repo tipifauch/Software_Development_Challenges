@@ -1,0 +1,452 @@
+.tgz
+
+find ./* -mtime +30 -type f -print
+./dirA/dirC/dirD/file7
+./dirA/dirC/dirD/file8
+./dirA/dirC/file4
+./dirA/dirC/file5
+./dirA/dirE/file9
+./dirA/file2
+./dirA/file3
+./dirB/dirF/dirG/file13
+./dirB/dirF/file11
+./dirB/dirF/file12
+./file1
+
+find ./* -mtime -30 -type f -print
+./dirA/dirC/dirD/file6
+./dirB/file10
+
+
+
+diff <(find ./* -mtime -30 -type f -print) <(find ./* -mtime +30 -type f -print) | awk '{FS="/";sub(FS $NF,x)}{print}'
+1,2c1,11
+< ./dirA/dirC/dirD/file6
+< ./dirB/file10
+---
+> ./dirA/dirC/dirD/file7
+> ./dirA/dirC/dirD/file8
+> ./dirA/dirC/file4
+> ./dirA/dirC/file5
+> ./dirA/dirE/file9
+> ./dirA/file2
+> ./dirA/file3
+> ./dirB/dirF/dirG/file13
+> ./dirB/dirF/file11
+> ./dirB/dirF/file12
+> ./file1
+
+
+awk '{FS="/";sub(FS $NF,x)}{print}'
+1,2c1,11
+< ./dirA/dirC/dirD
+< ./dirB
+---
+> ./dirA/dirC/dirD
+> ./dirA/dirC/dirD
+> ./dirA/dirC
+> ./dirA/dirC
+> ./dirA/dirE
+> ./dirA
+> ./dirA
+> ./dirB/dirF/dirG
+> ./dirB/dirF
+> ./dirB/dirF
+> .
+
+
+Look at each directory dir in category2
+	if dir exists in category1
+	continue
+	if not 
+	tar -cf thisdir.tgz thisdir/*
+	
+awk 'BEGIN {FS="/|.| |<|>"; OFS="/n"}{print out}'
+
+
+
+diff <(find ./* -mtime -30 -type f -print) <(find ./* -mtime +30 -type f -print) | awk '{FS="/";sub(FS $NF,x)}{print}'
+
+awk '{for (i=1; i<=NF; i++)  }
+
+
+
+
+diff <(find ./* -mtime -30 -type f -print) <(find ./* -mtime +30 -type f -print) | awk '{FS="/";sub(FS $NF,x)}{print}'| awk -F'[/.<>]' '{for print $4 " " $5 " " $6}'
+
+
+
+
+
+
+
+
+diff <(find ./* -mtime -30 -type f -print) <(find ./* -mtime +30 -type f -print) | awk '{FS="/";sub(FS $NF,x)}{print}'| awk 'BEGIN{FS="/| .|<|>"; OFS="/n"}{for (i=1;i<=NF;i++) print $i}' |  '/^$/d'
+1,4c1,11
+dirA
+dirC
+dirD
+dirB
+---
+dirA
+dirC
+dirD
+dirA
+dirC
+dirD
+dirA
+dirC
+dirA
+dirC
+dirA
+dirE
+dirA
+dirA
+dirB
+dirF
+dirG
+dirB
+dirF
+dirB
+dirF
+
+à partir de "---" 
+
+egrep -n '^---'
+
+
+
+/* line "---" number
+
+
+
+
+diff <(find ./* -mtime -30 -type f -print) <(find ./* -mtime +30 -type f -print) | awk '{FS="/";sub(FS $NF,x)}{print}'| awk 'BEGIN{FS="/| .|<|>"; OFS="/n"}{for (i=1;i<=NF;i++) print $i}' | sed '/^$/d'
+
+diff <(awk '{for (i=$NUM;i<=NR;i++) print i}
+
+
+NUM=` diff <(find ./* -mtime -30 -type f -print) <(find ./* -mtime +30 -type f -print) | awk '{FS="/";sub(FS $NF,x)}{print}'| awk 'BEGIN{FS="/| .|<|>"; OFS="/n"}{for (i=1;i<=NF;i++) print $i}' | sed '/^$/d'| grep -n '^---' | awk -F':' '{print $1}' `
+
+> 6
+
+
+diff <(find ./* -mtime -30 -type f -print) <(find ./* -mtime +30 -type f -print) | awk '{FS="/";sub(FS $NF,x)}{print}'| awk 'BEGIN{FS="/| .|<|>"; OFS="/n"}{for (i=1;i<=NF;i++) print $i}' | sed '/^$/d' | sed -n "$NUM,9p"
+---
+dirA
+dirC
+dirD
+
+
+
+
+awk 'BEGIN{FS="/| .|<|>";OFS="//n"}{for (i=1;i<=NF;i++) print $i}'
+
+
+
+diff <(find ./* -mtime -30 -type f -print) <(find ./* -mtime +30 -type f -print) | awk '{FS="/";sub(FS $NF,x)}{print}'| awk 'BEGIN{FS="/| .|<|>"; OFS="/n"}{for (i=1;i<=NF;i++) print $i}' | sed '/^$/d' | sed -n '/^---/,$p'
+---
+dirA
+dirC
+dirD
+dirA
+dirC
+dirD
+dirA
+dirC
+dirA
+dirC
+dirA
+dirE
+dirA
+dirA
+dirB
+dirF
+dirG
+dirB
+dirF
+dirB
+dirF
+
+
+
+
+
+
+
+
+
+find ./* -mtime +30 -type f -print|awk '{FS="/";sub(FS $NF,x)}{print}'
+./dirA/dirC/dirD/file7
+./dirA/dirC/dirD
+./dirA/dirC
+./dirA/dirC
+./dirA/dirE
+./dirA
+./dirA
+./dirB/dirF/dirG
+./dirB/dirF
+./dirB/dirF
+
+
+find ./* -mtime -30 -type f -print|awk '{FS="/";sub(FS $NF,x)}{print}'
+./commands.txt
+./dirA
+./dirA/dirC
+./dirA/dirC/dirD
+./dirB
+
+
+comm -23 <(find ./* -mtime +30 -type f -print| awk '{FS="/";OFS="/"}{$NF=""; print}'| sort | uniq) <(find ./* -mtime -30 -type f -print| awk '{FS="/";OFS="/"}{$NF=""; print}'| sort | uniq)
+./dirA/dirE/
+./dirB/dirF/
+./dirB/dirF/dirG/
+
+awk	-F'	' '{for (i=1;i<=NF;i++)	"tar -cf $i.tgz $i/*"}'
+
+
+comm -23 <(find ./* -mtime +30 -type f -print| awk '{FS="/";OFS="/"}{$NF=""; print}'| sort | uniq) <(find ./* -mtime -30 -type f -print| awk '{FS="/";OFS="/"}{$NF=""; print}'| sort | uniq) | sed 's/.$//' 
+
+
+| -awk -F' ' '{print "tar cf "$1".tgz "$1"/* && rm -R "$1 }'
+
+
+if a pattern appears	twice and NF(line)<NF(line2)	
+then delete line2	
+
+awk	'{ORS=" "}{print}
+
+
+
+
+
+
+
+
+diff <(find ./* -mtime -30 -type f -print) <(find ./* -mtime +30 -type f -print) | awk '{FS="/";sub(FS $NF,x)}{print}' | diff <(sed -n '/^---/,$p'|sort|uniq) <(sed -n '1,/^---/p'|sort|uniq)
+
+diff <(find ./* -mtime -30 -type f -print) <(find ./* -mtime +30 -type f -print) | awk '{FS="/";sub(FS $NF,x)}{print}' | sed -n '/^---/,$p'|sort|uniq
+diff <(find ./* -mtime -30 -type f -print) <(find ./* -mtime +30 -type f -print) | awk '{FS="/";sub(FS $NF,x)}{print}' | sed -n '1,/^---/p'|sort|uniq
+
+
+
+
+Georgettefr:shell3_donottouch_copy celia$ diff <(find ./* -mtime -30 -type f -print) <(find ./* -mtime +30 -type f -print) | awk -F'/.' '{sub(FS $NF,x)}{print}'
+1,4c1,11
+< ./dirA
+< ./dirA/dirC
+< ./dirA/dirC/dirD
+< ./dirB
+---
+> ./dirA/dirC/dirD
+> ./dirA/dirC/dirD
+> ./dirA/dirC
+> ./dirA/dirC
+> ./dirA/dirE
+> ./dirA
+> ./dirA
+> ./dirB/dirF/dirG
+> ./dirB/dirF
+> ./dirB/dirF
+> .
+
+for (i=NF;i>=1;i--)
+si tous les dossiers d'ue lige sot co
+if all te folders of a line are included in a line of cat 1 then delete
+
+.dirA/
+.dirA/dirC
+.dirA/dirC/dirD
+.dirB
+
+diff <(find ./* -mtime -30 -print | awk -F'/.' '{sub(FS $NF,x)}{print}'| sort | uniq) <(find ./* -mtime +30 -print | awk -F'/.' '{sub(FS $NF,x)}{print}'| sort | uniq)
+
+
+
+find . -type f -mtime +30 -printf '%h\n' | sort | uniq > old.txt
+find . -type f -mtime -30 -printf '%h\n' | sort | uniq > new.txt
+grep -vf <(find . -type f -mtime +30 -printf '%h\n' | sort | uniq) <(find . -type f -mtime -30 -printf '%h\n' | sort | uniq)
+
+
+
+
+
+
+
+
+Georgettefr:shell3_donottouch_copy celia$ find ./* -type f -mtime -30 -print | awk -F'/.' '{sub(FS $NF,x)}{print}'| sort | uniq
+./dirA/dirC/dirD
+./dirB
+
+awk -F'/' {print $1 "/n" $1"/"$2"/"$3 }
+
+
+
+TEST=$(awk -F'/' 'BEGIN{for (i=2;i<=NF;i++) {for (k=1;k<=i;k++) {print "/"$k}}'
+
+
+
+
+
+
+TEST=$(awk -F'/' 'BEGIN{i=2; for (k=1;k<=i;k++) {print "/"$k} k++}'
+
+
+awk '{k=0; for (i=1;i<=NF;i++){
+            if ($i=="ABC"){print $(i-2); k++}
+           } 
+           if(k==0){print "No ABC in line",NR}
+     }'
+	 
+	 
+	 
+	 
+	 awk '{print $0}'
+	 
+	 
+awk -F'/' '{print*NF}'
+
+
+
+
+
+
+comm -23 <(find ./* -mtime +30 -print| awk '{FS="/";OFS="/"}{$NF=""; print}'| sort | uniq) <(find ./* -mtime -30 -print| awk '{FS="/";OFS="/"}{$NF=""; print}'| sort | uniq)
+
+
+
+comm -23 <(find ./* -mtime +30 -print| awk '{FS="/";OFS="/"}{$NF=""; print}'| sort | uniq) <(find ./* -mtime -30 -print| awk '{FS="/";OFS="/"}{$NF=""; print}'| sort | uniq) | awk -F' ' '{print "tar -cf "$1".tgz "$1"/* && rm -R "$1 }'| sh
+
+
+
+
+
+
+
+
+comm -23 <(find ./* -mtime +30 -print| awk '{FS="/";OFS="/"}{$NF=""; print}'| sort | uniq) <(find ./* -mtime -30 -print| awk '{FS="/";OFS="/"}{$NF=""; print}'| sort | uniq) | cut -c3-
+dirA/dirE/
+dirB/dirF/dirG/
+
+comm -23 <(find ./* -mtime -30 -print| awk '{FS="/";OFS="/"}{$NF=""; print}'| sort | uniq) <(find ./* -print| awk '{FS="/";OFS="/"}{$NF=""; print}'| sort | uniq)
+
+
+
+
+
+
+comm -23 <(find ./* -mtime +30 -print| awk '{FS="/";OFS="/"}{$NF=""; print}'| sort | uniq) <(find ./* -mtime -30 -print| awk '{FS="/";OFS="/"}{$NF=""; print}'| sort | uniq) | cut -c3- | sed "s/.$//" | awk -F' ' '{print "tar -cf ./"$1".tgz "$1"/* && rm -R ./"$1 }' | sh
+
+
+for each line 
+if $/* -type f -mtime -30 -print is empty then echo "tar -cf "%".tgz "$1"/* && rm -R %"
+
+
+KIL=$(find ./* -type f -print) | sed "s/.$//" | echo $KIL | awk -F' ' '{for (i=1;i<=NF;i++) print "find " $i"/* -type f -mtime -30 -print"}' | sh
+ 
+ 
+ 
+ 
+ VAR='./dirA/dirC/dirD'
+ results='find '$VAR'/* -type f -mtime -30 -print'
+      if [[ -z $results ]] ; then
+       echo $VAR
+      else
+       echo "Files found"
+      fi
+	  
+VAR='./dirA/dirC'	  
+results='find ./dirA/dirC -type f -mtime -30 -print'	  
+if [[ -z $results ]] ; then echo $VAR; else echo "Files found";fi
+
+VAR2='./dirA/dirE'
+results2='find ./dirA/dirE -type f -mtime -30 -print'
+if [[ -z $results2 ]] ; then echo $VAR2; else echo "Files found";fi
+
+
+if [ "$results" '!=' '' ] ; then echo 'find found something'; else echo 'no matching files found'; fi
+
+
+
+"case `find ./dirA/dirE -type f -mtime -30 -print` in   '') echo ;;   *) echo 'Found filename' ;; esac"
+
+VAR=$(find ./* -type f -print | awk '{FS="/";OFS="/"}{$NF=""; print}' | uniq) | echo $VAR | awk -F' ' '{for (i=1;i<=NF;i++) print "find "$i" -type f -mtime -30 -print"
+
+
+case '$1' in '') echo "$i" ;; *) echo 'Found filename' ;; esac"}'
+
+
+find ./* -type f -print | awk '{FS="/";OFS="/"}{$NF=""; print}' | uniq | awk -F' ' '{print "case 'find "$i" -type f -mtime -30 -print' in '') echo "$i" ;;   *) echo 'Found filename' ;; esac"}'
+
+
+find ./* -type f -print | awk '{FS="/";OFS="/"}{$NF=""; print}' | uniq | awk -F' ' '{print "VAR=$("$i")"}'
+
+
+for item in $list do echo "Item: $item" done
+
+
+while read -r line; do echo "... $line ..." done <<< "$list"
+
+
+while read -r line; do
+    echo "case 'find $line -type f -mtime -30 -print' in '') echo line ;;   *) echo 'Found filename' ;; esac"
+done <<< "$list"
+
+
+[find ./dirA/dirE -type f -mtime -30 -print | wc -l -gt 0 ] && true || false
+
+
+
+
+
+
+
+find ./* -type f -print | awk '{FS="/";OFS="/"}{$NF=""; print}' | uniq | sed "s/.$//" | while read -r line; do case `find $line -type f -mtime -30` in   '') echo $line ;;   *) echo 'Found filename' ;; esac ; done
+
+
+
+
+
+find ./* -type f -print | awk '{FS="/";OFS="/"}{$NF=""; print}' | uniq | sed "s/.$//" | sed "/^$/d" | while read -r line; do case `find $line -type f -mtime -30` in   '') echo $line ;;   *) ;; esac ; done | while read -r line; do tar -cvf $line.tgz $line/* && rm -R $line ; done
+
+
+
+
+------------------------------------------------------------------
+
+
+nom_de_la_fonction(parametre_1,parametre_2,…,parametre_n)
+
+def nom_de_la_fonction(parametre1, parametre2, parametre3, parametreN):
+
+
+#!/usr/bin/python
+
+import sys
+import fileinput
+
+def sequence(site_address):
+
+        print readline()
+        print(line[0].split(' <-- ')[1])
+
+#while (site_adress!=[none]):
+#       site_adress=site_adress.pred()
+#       print (site_adress)
+
+sequence(sys.argv[1])
+
+
+
+file=fileinput.input()
+print file.readline()
+
+
+
+import fileinput
+
+file=fileinput.input()
+print file.readline()
+
+
+
